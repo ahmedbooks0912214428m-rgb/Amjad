@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-i18n="title">إدارة الحسابات</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+</head>
+<body>
+<div class="c">
+<div class="hd">
+<h1>💼 <span data-i18n="appTitle">إدارة الحسابات</span></h1>
+<div class="hd-actions">
+<button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
+<span class="ss syncing" id="ss">⏳</span>
+<button class="ib" onclick="toggleTheme()" id="tb">🌙</button>
+</div>
+</div>
+
+<div class="sg">
+<div class="sc" onclick="filterByType('all')"><span class="l" data-i18n="total">📊 الإجمالي</span><span class="v" id="tc">0</span></div>
+<div class="sc"><span class="l" data-i18n="usdTotal">💰 USD</span><span class="v gold" id="tu">$0.00</span></div>
+<div class="sc"><span class="l">⭐ النقاط</span><span class="v" id="tp" style="color:#2dd4bf">0</span></div>
+<div class="sc" onclick="filterByType('أمريكي')"><span class="l">🇺🇸 <span data-i18n="american">أمريكي</span></span><span class="v blue" id="ta">0</span></div>
+<div class="sc" onclick="filterByType('هونغ كونغ')"><span class="l">🇭🇰 <span data-i18n="hongkong">هونغ كونغ</span></span><span class="v red" id="th">0</span></div>
+<div class="sc" onclick="filterByType('ياباني')"><span class="l">🇯🇵 <span data-i18n="japanese">ياباني</span></span><span class="v pink" id="tj">0</span></div>
+<div class="sc" onclick="filterByType('سوداني')"><span class="l">🇸🇩 <span data-i18n="sudanese">سوداني</span></span><span class="v sudan" id="tsd">0</span></div>
+</div>
+
+<div class="charts-row">
+<div class="chart-card">
+<h4 data-i18n="pieChart">📊 توزيع الأنواع</h4>
+<svg id="pieChart" viewBox="0 0 200 200"></svg>
+</div>
+<div class="chart-card">
+<h4 data-i18n="barChart">📈 عدد الحسابات</h4>
+<svg id="barChart" viewBox="0 0 400 200"></svg>
+</div>
+</div>
+
+<div class="tb">
+<button class="tbb active" onclick="switchTab('single',this)" data-i18n="single">➕ فردية</button>
+<button class="tbb" onclick="switchTab('bulk',this)" data-i18n="bulk">📦 جماعية</button>
+<button class="tbb" onclick="switchTab('filters',this)" data-i18n="advancedFilters">🔍 بحث متقدم</button>
+</div>
+
+<div class="tc active" id="tab-single">
+<h3 data-i18n="addSingle">➕ إضافة حساب واحد</h3>
+<div class="af">
+<div class="fg"><label data-i18n="email">البريد الإلكتروني</label><input type="email" id="ei" placeholder="example@gmail.com" dir="ltr"></div>
+<div class="fg"><label data-i18n="type">النوع</label>
+<select id="ti" onchange="updateFF()">
+<option value="سوداني" data-i18n="sudanese">🇸🇩 سوداني</option>
+<option value="أمريكي" data-i18n="american">🇺🇸 أمريكي</option>
+<option value="هونغ كونغ" data-i18n="hongkong">🇭🇰 هونغ كونغ</option>
+<option value="ياباني" data-i18n="japanese">🇯🇵 ياباني</option>
+</select></div>
+<div class="fg" id="pg"><label data-i18n="price">السعر</label><input type="number" id="pi" placeholder="0.00" min="0" step="0.01"></div>
+<div class="fg"><label data-i18n="currency">العملة</label><select id="ci" onchange="updateCurrencyDisplay()"></select></div>
+<button onclick="addAccount()" data-i18n="addBtn">➕ إضافة</button>
+</div>
+</div>
+
+<div class="tc" id="tab-bulk">
+<h3 data-i18n="addBulk">📦 إضافة جماعية</h3>
+<div class="hb">
+<strong data-i18n="hintTitle">🧠 النظام يستوعب أي صيغة:</strong><br>
+<code>user@gmail.com 50 أمريكي</code><br>
+<code>ahmed@gmail.com سوداني</code><br>
+<code>test@x.com 100 SAR</code>
+</div>
+<div class="bf">
+<textarea id="bi" placeholder="الصق الإيميلات هنا..."></textarea>
+<div class="bo">
+<div class="fg"><label data-i18n="defaultType">النوع الافتراضي</label><select id="bdt"><option value="سوداني" data-i18n="sudanese">🇸🇩 سوداني</option><option value="أمريكي" data-i18n="american">🇺🇸 أمريكي</option><option value="هونغ كونغ" data-i18n="hongkong">🇭🇰 هونغ كونغ</option><option value="ياباني" data-i18n="japanese">🇯🇵 ياباني</option></select></div>
+<div class="fg"><label data-i18n="duplicate">التكرار</label><select id="bda"><option value="skip" data-i18n="skip">تخطي</option><option value="update" data-i18n="update">تحديث</option></select></div>
+</div>
+<div class="ba">
+<button class="p" onclick="bulkAdd()" data-i18n="addAll">📥 إضافة الكل</button>
+<button class="s" onclick="loadExample()" data-i18n="example">📋 مثال</button>
+<button class="s" onclick="clearBulkInput()" data-i18n="clear">🧹 تفريغ</button>
+</div>
+</div>
+</div>
+
+<div class="tc" id="tab-filters">
+<h3 data-i18n="advancedSearch">🔍 بحث متقدم</h3>
+<div class="af" style="display:flex;flex-direction:column;gap:12px">
+<div class="fg"><label data-i18n="priceFrom">السعر من (USD)</label><input type="number" id="pFrom" placeholder="0" min="0" step="0.01"></div>
+<div class="fg"><label data-i18n="priceTo">السعر إلى (USD)</label><input type="number" id="pTo" placeholder="9999" min="0" step="0.01"></div>
+<div class="fg"><label data-i18n="dateFrom">التاريخ من</label><input type="date" id="dFrom"></div>
+<div class="fg"><label data-i18n="dateTo">التاريخ إلى</label><input type="date" id="dTo"></div>
+<button onclick="applyAdvancedFilter()" data-i18n="applyFilter">🔍 تطبيق البحث</button>
+<button onclick="clearAdvancedFilter()" style="background:#475569" data-i18n="clearFilter">🧹 مسح البحث</button>
+</div>
+</div>
+
+<div class="ct">
+<div class="sr">
+<input type="text" id="si" placeholder="🔍 ابحث..." oninput="renderAccounts()" data-i18n="search">
+<select id="ft" onchange="renderAccounts()">
+<option value="all" data-i18n="all">الكل</option>
+<option value="سوداني" data-i18n="sudanese">🇸🇩 سوداني</option>
+<option value="أمريكي" data-i18n="american">🇺🇸 أمريكي</option>
+<option value="هونغ كونغ" data-i18n="hongkong">🇭🇰 هونغ كونغ</option>
+<option value="ياباني" data-i18n="japanese">🇯🇵 ياباني</option>
+</select>
+<span class="fc" id="fc">0/0</span>
+</div>
+<div class="ar">
+<button class="bn sync" onclick="forceSync()" data-i18n="sync">🔄 مزامنة</button>
+<button class="bn backup" onclick="exportBackup()" data-i18n="backup">💾 نسخة</button>
+<button class="bn restore" onclick="triggerImport()" data-i18n="restore">📂 استيراد</button>
+<button class="bn html" onclick="exportToHTML()" data-i18n="html">🌐 HTML</button>
+<button class="bn pdf" onclick="exportToPDF()" data-i18n="pdf">📄 PDF</button>
+<button class="bn csv" onclick="exportToCSV()" data-i18n="csv">📥 CSV</button>
+<button class="bn clear" onclick="openClearModal()" data-i18n="clearAll">🗑️ مسح الكل</button>
+</div>
+<input type="file" id="if" accept=".json" style="display:none" onchange="importBackup(event)">
+</div>
+
+<div class="av">
+<div class="cs" id="cc"></div>
+<div class="tv">
+<div class="tw">
+<table>
+<thead><tr>
+<th style="width:40px">#</th>
+<th data-i18n="email">البريد</th>
+<th data-i18n="type">النوع</th>
+<th data-i18n="price">السعر</th>
+<th>USD</th>
+<th>⭐ نقاط</th>
+<th data-i18n="date">📅 تاريخ</th>
+<th style="width:90px" data-i18n="actions">إجراء</th>
+</tr></thead>
+<tbody id="at"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mo" id="cm">
+<div class="m">
+<h3 data-i18n="confirmClear">⚠️ تأكيد المسح</h3>
+<p data-i18n="confirmClearMsg">هل أنت متأكد من مسح جميع الحسابات؟ لا يمكن التراجع!</p>
+<div class="ma">
+<button class="mc" onclick="closeClearModal()" data-i18n="cancel">❌ إلغاء</button>
+<button class="mf" onclick="confirmClearAll()" data-i18n="delete">🗑️ مسح</button>
+</div>
+</div>
+</div>
+
+<div class="ts" id="tst"></div>
+
+<script src="auth.js"></script>
+<script src="lang.js"></script>
+<script src="app.js"></script>
+<script src="points.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(e=>console.log('SW fail',e))}</script>
+</body>
+</html>
