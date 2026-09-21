@@ -1,0 +1,20 @@
+{
+"name": "إدارة الحسابات - أمجد",
+"short_name": "حساباتي",
+"description": "نظام إدارة الحسابات مع المزامنة",
+"start_url": "/",
+"display": "standalone",
+"background_color": "#0f172a",
+"theme_color": "#0f172a",
+"orientation": "portrait",
+"lang": "ar",
+"dir": "rtl",
+"icons": [
+{
+"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMGYxNzJhIi8+PHRleHQgeD0iOTYiIHk9IjEyMCIgZm9udC1zaXplPSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzM4YmRmOCI+8J+SvPCfkLw8L3RleHQ+PC9zdmc+",
+"sizes": "192x192",
+"type": "image/svg+xml",
+"purpose": "any maskable"
+}
+]
+}
