@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إدارة الحسابات</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+</head>
+<body>
+<div class="c">
+<div class="hd">
+<h1>💼 إدارة الحسابات</h1>
+<div class="hd-actions">
+<button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button>
+<span class="ss syncing" id="ss">⏳</span>
+<button class="ib" onclick="toggleTheme()" id="tb">🌙</button>
+</div>
+</div>
+
+<div class="sg">
+<div class="sc" onclick="filterByType('all')"><span class="l">📊 الإجمالي</span><span class="v" id="tc">0</span></div>
+<div class="sc"><span class="l">💰 USD</span><span class="v gold" id="tu">$0.00</span></div>
+<div class="sc"><span class="l">⭐ النقاط</span><span class="v" id="tp" style="color:#2dd4bf">0</span></div>
+<div class="sc" onclick="filterByType('أمريكي')"><span class="l">🇺🇸 أمريكي</span><span class="v blue" id="ta">0</span></div>
+<div class="sc" onclick="filterByType('هونغ كونغ')"><span class="l">🇭🇰 هونغ كونغ</span><span class="v red" id="th">0</span></div>
+<div class="sc" onclick="filterByType('ياباني')"><span class="l">🇯🇵 ياباني</span><span class="v pink" id="tj">0</span></div>
+<div class="sc" onclick="filterByType('سوداني')"><span class="l">🇸🇩 سوداني</span><span class="v sudan" id="tsd">0</span></div>
+</div>
+
+<div class="charts-row">
+<div class="chart-card">
+<h4>📊 توزيع الأنواع</h4>
+<svg id="pieChart" viewBox="0 0 200 200"></svg>
+</div>
+<div class="chart-card">
+<h4>📈 عدد الحسابات</h4>
+<svg id="barChart" viewBox="0 0 400 200"></svg>
+</div>
+</div>
+
+<div class="tb">
+<button class="tbb active" onclick="switchTab('single',this)">➕ فردية</button>
+<button class="tbb" onclick="switchTab('bulk',this)">📦 جماعية</button>
+<button class="tbb" onclick="switchTab('filters',this)">🔍 بحث متقدم</button>
+</div>
+
+<div class="tc active" id="tab-single">
+<h3>➕ إضافة حساب واحد</h3>
+<div class="af">
+<div class="fg"><label>البريد الإلكتروني</label><input type="email" id="ei" placeholder="example@gmail.com" dir="ltr"></div>
+<div class="fg"><label>النوع</label>
+<select id="ti" onchange="updateFF()">
+<option value="سوداني">🇸🇩 سوداني</option>
+<option value="أمريكي">🇺🇸 أمريكي</option>
+<option value="هونغ كونغ">🇭🇰 هونغ كونغ</option>
+<option value="ياباني">🇯🇵 ياباني</option>
+</select></div>
+<div class="fg" id="pg"><label>السعر</label><input type="number" id="pi" placeholder="0.00" min="0" step="0.01"></div>
+<div class="fg"><label>العملة</label><select id="ci" onchange="updateCurrencyDisplay()"></select></div>
+<button onclick="addAccount()">➕ إضافة</button>
+</div>
+</div>
+
+<div class="tc" id="tab-bulk">
+<h3>📦 إضافة جماعية</h3>
+<div class="hb">
+<strong>🧠 النظام يستوعب أي صيغة:</strong><br>
+<code>user@gmail.com 50 أمريكي</code><br>
+<code>ahmed@gmail.com سوداني</code><br>
+<code>test@x.com 100 SAR</code>
+</div>
+<div class="bf">
+<textarea id="bi" placeholder="الصق الإيميلات هنا..."></textarea>
+<div class="bo">
+<div class="fg"><label>النوع الافتراضي</label><select id="bdt"><option value="سوداني">🇸🇩 سوداني</option><option value="أمريكي">🇺🇸 أمريكي</option><option value="هونغ كونغ">🇭🇰 هونغ كونغ</option><option value="ياباني">🇯🇵 ياباني</option></select></div>
+<div class="fg"><label>التكرار</label><select id="bda"><option value="skip">تخطي</option><option value="update">تحديث</option></select></div>
+</div>
+<div class="ba">
+<button class="p" onclick="bulkAdd()">📥 إضافة الكل</button>
+<button class="s" onclick="loadExample()">📋 مثال</button>
+<button class="s" onclick="clearBulkInput()">🧹 تفريغ</button>
+</div>
+</div>
+</div>
+
+<div class="tc" id="tab-filters">
+<h3>🔍 بحث متقدم</h3>
+<div class="af" style="display:flex;flex-direction:column;gap:12px">
+<div class="fg"><label>السعر من (USD)</label><input type="number" id="pFrom" placeholder="0" min="0" step="0.01"></div>
+<div class="fg"><label>السعر إلى (USD)</label><input type="number" id="pTo" placeholder="9999" min="0" step="0.01"></div>
+<div class="fg"><label>التاريخ من</label><input type="date" id="dFrom"></div>
+<div class="fg"><label>التاريخ إلى</label><input type="date" id="dTo"></div>
+<button onclick="applyAdvancedFilter()">🔍 تطبيق البحث</button>
+<button onclick="clearAdvancedFilter()" style="background:#475569">🧹 مسح البحث</button>
+</div>
+</div>
+
+<div class="ct">
+<div class="sr">
+<input type="text" id="si" placeholder="🔍 ابحث..." oninput="renderAccounts()">
+<select id="ft" onchange="renderAccounts()">
+<option value="all">الكل</option>
+<option value="سوداني">🇸🇩 سوداني</option>
+<option value="أمريكي">🇺🇸 أمريكي</option>
+<option value="هونغ كونغ">🇭🇰 هونغ كونغ</option>
+<option value="ياباني">🇯🇵 ياباني</option>
+</select>
+<span class="fc" id="fc">0/0</span>
+</div>
+<div class="ar">
+<button class="bn sync" onclick="forceSync()">🔄 مزامنة</button>
+<button class="bn backup" onclick="exportBackup()">💾 نسخة</button>
+<button class="bn restore" onclick="triggerImport()">📂 استيراد</button>
+<button class="bn html" onclick="exportToHTML()">🌐 HTML</button>
+<button class="bn pdf" onclick="exportToPDF()">📄 PDF</button>
+<button class="bn csv" onclick="exportToCSV()">📥 CSV</button>
+<button class="bn clear" onclick="openClearModal()">🗑️ مسح الكل</button>
+</div>
+<input type="file" id="if" accept=".json" style="display:none" onchange="importBackup(event)">
+</div>
+
+<div class="av">
+<div class="cs" id="cc"></div>
+<div class="tv">
+<div class="tw">
+<table>
+<thead><tr>
+<th style="width:40px">#</th>
+<th>البريد</th>
+<th>النوع</th>
+<th>السعر</th>
+<th>USD</th>
+<th>⭐ نقاط</th>
+<th>📅 تاريخ</th>
+<th style="width:90px">إجراء</th>
+</tr></thead>
+<tbody id="at"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mo" id="cm">
+<div class="m">
+<h3>⚠️ تأكيد المسح</h3>
+<p>هل أنت متأكد من مسح جميع الحسابات؟</p>
+<div class="ma">
+<button class="mc" onclick="closeClearModal()">❌ إلغاء</button>
+<button class="mf" onclick="confirmClearAll()">🗑️ مسح</button>
+</div>
+</div>
+</div>
+
+<div class="ts" id="tst"></div>
+
+<script src="auth.js"></script>
+<script src="lang.js"></script>
+<script src="app.js"></script>
+<script src="points.js"></script>
+</body>
+</html>
